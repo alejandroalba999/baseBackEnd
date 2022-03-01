@@ -21,3 +21,5 @@ process.env.URLDB = urlDB;
 process.env.SEED = process.env.SEED || 'Frima-super-secreta';
 
 process.env.CADUCIDAD_TOKEN = process.env.CADUCIDAD_TOKEN || '3h';
+
+process.env.RUTA = '/api'

@@ -1,11 +1,16 @@
 const express = require('express');
-const { verificaToken } = require('../middlewares/autenticacion');
+require('../config/config');
 const app = express();
+const ApiModel = require('../models/permisos/api');
 
-app.all('/', (req, res) => {
+app.all('/', async (req, res) => {
+    const getApis = await ApiModel.aggregate([{ $project: { _id: 0, strRuta: 1 } }]);
     return res.status(200).json({
         ok: true,
-        msg: 'Inicio del backend ',
+        msg: 'Indice del servidor cafeteria',
+        cont: {
+            rutas: getApis.map(res => `${process.env.RUTA}${res.strRuta}`)
+        }
     });
 
 });

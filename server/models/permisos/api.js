@@ -9,7 +9,7 @@ let apiSchema = new Schema({
     },
     strDescripcion: {
         type: String,
-        required: [true, 'Por favor ingresa el nombre la descripción del api']
+        required: [true, 'Por favor ingresa el nombre de la descripción del api']
     }
 });
 

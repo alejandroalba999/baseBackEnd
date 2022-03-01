@@ -2,12 +2,12 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const { verificaToken } = require('../middlewares/autenticacion');
-const Usuario = require('../models/usuario'); //subir nivel
 const subidorArchivos = require('../Libraries/subirArchivo');
+const Usuario = require('../models/usuario')
 const app = express.Router();
 
 
-app.get('/', verificaToken, async (req, res) => {
+const getUser = async (req, res) => {
     await Usuario.find({ blnEstado: true }) //select * from usuario where estado=true
         //solo aceptan valores numericos
         .exec((err, usuarios) => { //ejecuta la funcion
@@ -23,8 +23,52 @@ app.get('/', verificaToken, async (req, res) => {
                 usuarios
             });
         });
+}
+
+const funcionFlecha = async (a, b) => a + b;
+
+async function funcion() {
+    return 'hola'
+}
+
+app.get('/prb', async (req, res) => {
+    const user = await funcion();
+    const userD = await funcionFlecha(5, 5);
+    // console.log(user);
+    // console.log(userD);
 });
-app.post('/', verificaToken, async (req, res) => {
+
+app.get('/', verificaToken, async (req, res) => {
+    try {
+        const getUser = await Usuario.find();
+        if (getUser.length > 0) {
+            return res.status(200).json({
+                msg: 'Se obtuvo la información correctamente',
+                count: getUser.length,
+                cont: {
+                    usuario: getUser
+                }
+            })
+        } else {
+            return res.status(200).json({
+                msg: 'No se encontrarón usuarios',
+                count: getUser.length,
+                cont: {
+                    usuario: getUser
+                }
+            })
+        }
+
+    } catch (error) {
+        return res.status(400).json({
+            msg: 'Error al obtener la información del usuario',
+            err: {
+                error
+            }
+        })
+    }
+});
+app.post('/', async (req, res) => {
     try {
         let body = { ...req.body, strPassword: req.body.strPassword ? bcrypt.hashSync(req.body.strPassword, 10) : '' };
         let usuario = new Usuario(body);
@@ -40,8 +84,7 @@ app.post('/', verificaToken, async (req, res) => {
             });
         } else {
             if (req.files) {
-                console.log('img');
-                // usuario.strImagen = await subidorArchivos.subirArchivo(req.files.strImagen, 'usuario', ['image/jpeg', 'image/png', 'image/gif']);
+                usuario.strImagen = await subidorArchivos.subirArchivo(req.files.strImagen, 'usuario', ['image/jpeg', 'image/png', 'image/gif']);
             }
             const usuarioRegister = await usuario.save()
             if (usuarioRegister) return res.status(200).json({
@@ -60,8 +103,6 @@ app.post('/', verificaToken, async (req, res) => {
         });
     }
 });
-
-
 app.put('/:id', verificaToken, async (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['strNombre', 'strEmail', 'strPassword', 'strDireccion']); //FILTRAR del body, on el pick seleccionar los campos que interesan del body 

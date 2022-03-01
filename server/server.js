@@ -28,7 +28,8 @@ app.use(bodyParser.urlencoded({ extended: false })); //url amistosa, captura los
 //Parse de formato a application/json
 app.use(bodyParser.json());
 //Archivo agrupador de rutas
-app.use('/api', require('./routes/index'));
+
+app.use(process.env.RUTA, require('./routes/index'));
 
 mongoose.connect(process.env.URLDB, {
     useNewUrlParser: true,

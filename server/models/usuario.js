@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
-const RolModel = require('./permisos/rol');
 //declarar esquema
 let Schema = mongoose.Schema;
 
@@ -26,7 +24,10 @@ let usuarioSchema = new Schema({
         type: Boolean,
         default: true
     },
-    aJsnRol: [RolModel.schema]
+    objIdRol: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'rol'
+    }
 });
 //crea una coleccion
 module.exports = mongoose.model('Usuario', usuarioSchema);

@@ -1,12 +1,20 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Usuario = require('../models/usuario');
+const Usuario = require('../../models/usuario');
 const app = express();
 
 app.post('/', (req, res) => {
     let body = req.body;
-
+    if (!body.strEmail || !body.strPassword) {
+        return res.status(400).json({
+            ok: false,
+            err: {
+                message: 'No se recibio el strEmail o strPassword',
+                body
+            }
+        });
+    }
     Usuario.findOne({ strEmail: body.strEmail, blnEstado: true }, (err, usrDB) => {
 
         if (err) {
@@ -25,7 +33,7 @@ app.post('/', (req, res) => {
             });
         }
 
-        if (!bcrypt.compareSync(body.password, usrDB.password)) {
+        if (!bcrypt.compareSync(body.strPassword, usrDB.strPassword)) {
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -45,5 +53,7 @@ app.post('/', (req, res) => {
         });
     });
 });
+
+
 
 module.exports = app;
