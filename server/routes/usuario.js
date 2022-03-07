@@ -7,6 +7,22 @@ const Usuario = require('../models/usuario')
 const app = express.Router();
 
 
+
+const funcionFlecha = (a, b) => { return { strNombrre: a, strApellido: b } };
+
+function funcion(a, b) {
+    return a + b
+}
+
+app.get('/prb', async (req, res) => {
+    console.log(funcionFlecha('Alejandro', 'Alba'));
+    //  funcionFlecha(5, 5);
+    // console.log(user);
+    // console.log(userD);
+});
+
+
+
 const getUser = async (req, res) => {
     await Usuario.find({ blnEstado: true }) //select * from usuario where estado=true
         //solo aceptan valores numericos
@@ -24,19 +40,6 @@ const getUser = async (req, res) => {
             });
         });
 }
-
-const funcionFlecha = async (a, b) => a + b;
-
-async function funcion() {
-    return 'hola'
-}
-
-app.get('/prb', async (req, res) => {
-    const user = await funcion();
-    const userD = await funcionFlecha(5, 5);
-    // console.log(user);
-    // console.log(userD);
-});
 
 app.get('/', verificaToken, async (req, res) => {
     try {
