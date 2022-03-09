@@ -18,7 +18,7 @@ app.post('/', async (req, res) => {
         const body = new CafeteriaModel(req.body);
         const err = body.validateSync();
         if (err) {
-            return res.status(500).json({
+            return res.status(400).json({
                 err: 'Sucedio un error',
                 cont: {
                     err
@@ -37,7 +37,7 @@ app.post('/', async (req, res) => {
         const cafeteriaRegistrada = await body.save();
 
         if (cafeteriaRegistrada) {
-            res.status(200).json({
+            return res.status(200).json({
                 msg: 'Se registro la cafeteria de manera correcta',
                 cont: {
                     cafeteriaRegistrada
@@ -54,6 +54,90 @@ app.post('/', async (req, res) => {
         })
     }
 
+})
+
+
+app.put('/', async (req, res) => {
+    const idCafeteria = req.query.idCafeteria;
+    try {
+        if (!idCafeteria || idCafeteria.length != 24) {
+            return res.status(400).json({
+                msg: 'No se recibio el parametro idCafeteria',
+                cont: {
+                    idCafeteria
+                }
+            })
+        }
+        const cafeteriaActualizada = await CafeteriaModel.findByIdAndUpdate({ _id: idCafeteria }, { strNombre: req.body.strNombre, strDescripcion: req.body.strDescripcion }, { new: true })
+        if (cafeteriaActualizada) {
+            return res.status(200).json({
+                msg: 'Cafeteria actualizada de manera exitosa',
+                cont: {
+                    cafeteriaActualizada
+                }
+            })
+        } else {
+            return res.status(400).json({
+                msg: 'Error al actualizar la cafeteria',
+                cont: {
+                    cafeteriaActualizada
+                }
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            msg: 'Error en el servidor al actualizar la cafeteria',
+            cont: {
+                error
+            }
+        })
+    }
+})
+
+app.delete('/', async (req, res) => {
+    const idCafeteria = req.query.idCafeteria;
+    const blnActivo = req.body.blnActivo;
+    try {
+        if (!idCafeteria || idCafeteria.length != 24) {
+            return res.status(400).json({
+                msg: 'No se recibio el parametro idCafeteria',
+                cont: {
+                    idCafeteria
+                }
+            })
+        }
+        if (!blnActivo) {
+            return res.status(400).json({
+                msg: 'No se recibio el parametro blnActivo',
+                cont: {
+                    blnActivo
+                }
+            })
+        }
+        const cafeteriaActualizada = await CafeteriaModel.findByIdAndUpdate({ _id: idCafeteria }, { blnActivo: blnActivo }, { new: true })
+        if (cafeteriaActualizada) {
+            return res.status(200).json({
+                msg: `La cafeteria se ${blnActivo == 'true' ? 'activo' : 'desactivo'} de manera exitosa`,
+                cont: {
+                    cafeteriaActualizada
+                }
+            })
+        } else {
+            return res.status(400).json({
+                msg: 'Error al desactivar la cafeteria',
+                cont: {
+                    cafeteriaActualizada
+                }
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            msg: 'Error en el servidor al desactivar la cafeteria',
+            cont: {
+                error
+            }
+        })
+    }
 })
 
 module.exports = app;

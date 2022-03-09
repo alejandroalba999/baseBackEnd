@@ -10,6 +10,10 @@ let schemaCafeteria = new Schema({
     strDescripcion: {
         type: String,
         required: [true, 'El strDescripción es requerido, favor de ingresarlo']
+    },
+    blnActivo: {
+        type: Boolean,
+        default: true
     }
 })
 
