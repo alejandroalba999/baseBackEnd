@@ -11,10 +11,19 @@ let schemaCafeteria = new Schema({
         type: String,
         required: [true, 'El strDescripción es requerido, favor de ingresarlo']
     },
+    nmbPrecio: {
+        type: Number,
+        required: [true, 'El nmbPrecio es requerido, favor de ingresarlo']
+    },
+    nmbCantidad: {
+        type: Number,
+        required: [true, 'El nmbCantidad es requerido, favor de ingresarlo']
+    },
+    strImagen: String,
     blnActivo: {
         type: Boolean,
         default: true
     }
 })
 
-module.exports = mongoose.model('cafeteria', schemaCafeteria)
+module.exports = mongoose.model('producto', schemaCafeteria)

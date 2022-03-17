@@ -12,7 +12,7 @@ let verificaToken = async (req, res, next) => {
                 msg: 'No se recibio un token de usuario valido'
             });
         }
-        //console.log('hola querido padre, he entrado al middleware pero no te diste cuenta');
+        console.log('hola querido padre, he entrado al middleware pero no te diste cuenta');
         jwt.verify(token, process.env.SEED, async (err, decoded) => {
             if (err) {
                 console.log('se denegó el acceso a la ruta', req.originalUrl.red, ' del metodo', req.method.yellow);

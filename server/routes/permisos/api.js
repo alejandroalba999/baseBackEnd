@@ -19,11 +19,23 @@ app.post('/', verificaToken, async (req, res) => {
                 }
             });
         } else {
-            const apiRegistrado = await api.save()
-            if (apiRegistrado) return res.status(200).json({
-                ok: true,
-                apiRegistrado
-            });
+            const encontrarRuta = await ApiModel.findOne({ strRuta: req.body.strRuta });
+            if (encontrarRuta) {
+                return res.status(400).json({
+                    ok: false,
+                    resp: 500,
+                    msg: 'La ruta ya se encuentra registrada en el modelo API.',
+                    err: {
+                        encontrarRuta
+                    }
+                });
+            } else {
+                const apiRegistrado = await api.save()
+                if (apiRegistrado) return res.status(200).json({
+                    ok: true,
+                    apiRegistrado
+                });
+            }
         }
     } catch (error) {
         return res.status(400).json({

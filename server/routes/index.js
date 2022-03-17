@@ -9,7 +9,7 @@ app.use('/imagen', require('./imagen'));
 app.use('/modelo', require('./getGeneral/modelo'));
 app.use('/permisos/rol', require('./permisos/rol'));
 app.use('/permisos/api', require('./permisos/api'));
-app.use('/cafeteria', require('./cafeteria'))
-
+app.use('/auth/permisos', require('./Auth/permision'))
+app.use('/producto', require('./producto'))
 
 module.exports = app;

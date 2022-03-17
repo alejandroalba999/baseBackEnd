@@ -7,40 +7,6 @@ const Usuario = require('../models/usuario')
 const app = express.Router();
 
 
-
-const funcionFlecha = (a, b) => { return { strNombrre: a, strApellido: b } };
-
-function funcion(a, b) {
-    return a + b
-}
-
-app.get('/prb', async (req, res) => {
-    console.log(funcionFlecha('Alejandro', 'Alba'));
-    //  funcionFlecha(5, 5);
-    // console.log(user);
-    // console.log(userD);
-});
-
-
-
-const getUser = async (req, res) => {
-    await Usuario.find({ blnEstado: true }) //select * from usuario where estado=true
-        //solo aceptan valores numericos
-        .exec((err, usuarios) => { //ejecuta la funcion
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-            return res.status(200).json({
-                ok: true,
-                count: usuarios.length,
-                usuarios
-            });
-        });
-}
-
 app.get('/', verificaToken, async (req, res) => {
     try {
         const getUser = await Usuario.find();
@@ -71,7 +37,7 @@ app.get('/', verificaToken, async (req, res) => {
         })
     }
 });
-app.post('/', async (req, res) => {
+app.post('/', verificaToken, async (req, res) => {
     try {
         let body = { ...req.body, strPassword: req.body.strPassword ? bcrypt.hashSync(req.body.strPassword, 10) : '' };
         let usuario = new Usuario(body);
