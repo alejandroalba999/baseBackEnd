@@ -7,9 +7,10 @@ let urlDB;
 
 if (process.env.NODE_ENV === 'dev') {
     //Son todas las funciones y procesos que tienen el amibiente del desarrollo que es local 
-    urlDB = 'mongodb://localhost:27017/cafeteria';
+    // urlDB = 'mongodb://localhost:27017/cafeteria';
+    urlDB = 'mongodb+srv://admin:admin@cluster0.dyboa.mongodb.net/cafeteria?retryWrites=true&w=majority'
 } else { //Ambiente de produccion nube = Heroku
-    urlDB = 'mongodb+srv://admin:admin@cluster0-pptzg.mongodb.net/test?retryWrites=true&w=majority';
+    urlDB = 'mongodb+srv://admin:admin@cluster0.dyboa.mongodb.net/cafeteria?retryWrites=true&w=majority';
 }
 
 //Tenemos dos ambientes el de produccion y el de desarrollo 
